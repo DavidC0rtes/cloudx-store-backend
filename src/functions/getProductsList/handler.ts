@@ -7,9 +7,9 @@ import { books } from 'src/store/books';
 
 const getProductsList: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   return formatJSONResponse({
-    message: books,
+    message: Object.values(books),
     event,
-  });
+  }, 200);
 };
 
 export const main = middyfy(getProductsList);
