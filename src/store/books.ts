@@ -1,7 +1,8 @@
 type Book = {
     id: number,
     title: string,
-    price: string,
+    description: string,
+    price: number,
     author?: string,
     inStock: boolean
 }
@@ -9,22 +10,25 @@ type Book = {
 export const books: Array<Book> = [
     {
         id: 1,
-        title: 'The Madman tale',
+        title: 'The Madman\'s Tale',
+        description: '',
         author: 'John',
-        price: '$12',
+        price: 12,
         inStock: true
     },
     {
         id: 2,
-        title: 'Crime and punishment',
+        title: 'Crime and Punishment',
+        description: '',
         author: 'Fyodor',
-        price: '$12',
+        price: 12,
         inStock: true
     },
     {
         id: 3,
-        title: 'The bible',
-        price: '$2',
+        title: 'The Bible',
+        description: '',
+        price: 2,
         inStock: true
     }
 ]

@@ -3,10 +3,11 @@ import { formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
 
 import schema from './schema';
+import { books } from 'src/store/books';
 
 const getProductById: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   return formatJSONResponse({
-    message: `Hello ${event.body.name}, welcome to the exciting Serverless world!`,
+    message: books.filter(book => book.id === event.body.id),
     event,
   });
 };

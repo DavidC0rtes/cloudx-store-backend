@@ -6,8 +6,8 @@ export default {
   events: [
     {
       http: {
-        method: 'post',
-        path: 'getProductsList',
+        method: 'get',
+        path: 'getProductsById',
         request: {
           schemas: {
             'application/json': schema,

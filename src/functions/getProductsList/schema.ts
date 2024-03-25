@@ -1,4 +1,4 @@
 export default {
-    type: "object"
+    type: "undefined"
   } as const;
   
