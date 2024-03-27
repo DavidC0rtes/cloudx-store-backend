@@ -1,6 +1,8 @@
 {
   "headers": {
-    "Content-Type": "application/json"
+    "Accept":"application/json"
   },
-  "body": "{\"id\": 1}"
+  "pathParemeters": {
+    "productId": 1
+  }
 }

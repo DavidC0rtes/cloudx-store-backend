@@ -6,7 +6,8 @@ import schema from './schema';
 import { books } from 'src/store/books';
 
 const getProductById: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-  const { message, status } = findProduct(event.body.id)
+  const { productId } = event.pathParameters
+  const { message, status } = findProduct(parseInt(productId))
   return formatJSONResponse({
     message: message,
     event,
