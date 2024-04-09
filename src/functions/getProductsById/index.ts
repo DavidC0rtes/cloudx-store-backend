@@ -1,4 +1,3 @@
-
 import { handlerPath } from '@libs/handler-resolver';
 
 export default {
