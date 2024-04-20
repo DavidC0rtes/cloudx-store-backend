@@ -30,7 +30,7 @@ export const apiGatewayResponseMiddleware = () => {
         if (error instanceof TypeError) {
             statusCode = 400
         }
-        request.response = formatJSONResponse({message: error.name }, statusCode)
+        request.response = formatJSONResponse({message: error?.name }, statusCode)
     }
 
     return { after, onError }

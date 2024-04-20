@@ -5,3 +5,5 @@ services:{
   "import-service":{
     path: 'import-service'}}
 }
+
+module.exports = serverlessCompose
