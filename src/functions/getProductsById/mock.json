@@ -2,7 +2,7 @@
   "headers": {
     "Accept":"application/json"
   },
-  "pathParemeters": {
-    "productId": 1
+  "pathParameters": {
+    "productId": "1"
   }
 }

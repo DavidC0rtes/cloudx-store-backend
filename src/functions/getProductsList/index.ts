@@ -1,4 +1,6 @@
 import { handlerPath } from '@libs/handler-resolver';
+import { AWSFunction } from '@libs/lambda';
+import 'dotenv/config'
 
 export default {
   handler: `${handlerPath(__dirname)}/handler.main`,
@@ -10,4 +12,4 @@ export default {
       }
     },
   ],
-};
+} as AWSFunction;
