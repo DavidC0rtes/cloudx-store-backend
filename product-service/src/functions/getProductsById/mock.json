@@ -1,6 +1,6 @@
 {
   "headers": {
-    "Accept":"application/json"
+    "Accept": "application/json"
   },
   "pathParameters": {
     "productId": "1"

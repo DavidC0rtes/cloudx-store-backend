@@ -1,3 +1,3 @@
 export default {
-    type: "undefined",
-  } as const;  
+  type: "undefined",
+} as const;
