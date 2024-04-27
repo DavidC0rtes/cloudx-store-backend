@@ -35,21 +35,17 @@ const parseAndSendToQueue = async (stream) => {
   );
 
   for await (const record of parser) {
-    console.info(JSON.stringify(record));
     await sendToQueue(JSON.stringify(record));
   }
 };
 
 const sendToQueue = async (body: string) => {
-  console.info(`Got message body ${body}`);
   const command = new SendMessageCommand({
     QueueUrl: process.env.SQS_QUEUE_URL,
     MessageBody: body,
   });
 
-  const response = await sqsClient.send(command);
-  console.info(`Queue result: ${response.$metadata.httpStatusCode}`);
-  return response;
+  return await sqsClient.send(command);
 };
 
 export const main = importFileParser;
