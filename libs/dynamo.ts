@@ -5,11 +5,62 @@ import {
   GetItemCommand,
   ScanCommand,
 } from "@aws-sdk/client-dynamodb";
+import { randomUUID } from "crypto";
+import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 
 export const client = new DynamoDBClient({
   //endpoint: 'http://localhost:8000',
   region: "us-east-1",
 });
+
+const docClient = DynamoDBDocumentClient.from(client);
+
+type CreateProductRequest = {
+  title: string;
+  description?: string;
+  price: number;
+  count: number;
+};
+
+export const createProduct = async (product: CreateProductRequest) => {
+  try {
+    const generatedId = randomUUID();
+
+    const productsResponse = await docClient.send(
+      new PutCommand({
+        TableName: process.env.PRODUCTS_TABLE,
+        Item: {
+          id: generatedId,
+          title: product.title,
+          description: product.description,
+          price: product.price,
+        },
+      })
+    );
+
+    const stocksResponse = await docClient.send(
+      new PutCommand({
+        TableName: process.env.STOCKS_TABLE,
+        Item: {
+          product_id: generatedId,
+          count: product.count,
+        },
+      })
+    );
+
+    const response = await Promise.all([productsResponse, stocksResponse]);
+
+    if (!response.every((out) => out.$metadata.httpStatusCode == 200)) {
+      throw new Error("Error while creating product");
+    }
+    return 200;
+  } catch (error) {
+    return {
+      status: 400,
+      message: `Bad request ${JSON.stringify(error)}`,
+    };
+  }
+};
 
 export const queryProductById = async (id: string) => {
   const command = new GetItemCommand({

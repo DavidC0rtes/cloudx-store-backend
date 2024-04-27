@@ -1,7 +1,6 @@
 import { handlerPath } from "@libs/handler-resolver";
 import { AWSFunction } from "@libs/lambda";
 
-console.log(`points to ${handlerPath(__dirname)}/handler.main`);
 export default {
   handler: `${handlerPath(__dirname)}/handler.main`,
   events: [
