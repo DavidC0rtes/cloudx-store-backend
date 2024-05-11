@@ -28,6 +28,12 @@ const serverlessConfiguration: AWS = {
               "arn:aws:s3:::${self:custom.bucket}/*",
             ],
           },
+          {
+            Effect: "Allow",
+            Action: ["sqs:SendMessage"],
+            Resource:
+              "arn:aws:sqs:${opt:region, self:provider.region}:640160916284:catalogItemsQueue*",
+          },
         ],
       },
     },

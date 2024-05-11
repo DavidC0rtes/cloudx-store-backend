@@ -3,6 +3,7 @@ import type { AWS } from "@serverless/typescript";
 import getProductsList from "@functions/getProductsList";
 import getProductsById from "@functions/getProductsById";
 import createProduct from "@functions/createProduct";
+import catalogBatchProcess from "@functions/catalogBatchProcess";
 
 const serverlessConfiguration: AWS = {
   service: "cloudx-store-backend",
@@ -36,12 +37,22 @@ const serverlessConfiguration: AWS = {
             Resource:
               "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/*",
           },
+          {
+            Effect: "Allow",
+            Action: ["sns:Publish"],
+            Resource: "arn:aws:sns:us-east-1:640160916284:createProductTopic",
+          },
         ],
       },
     },
   },
   // import the function via paths
-  functions: { getProductsList, getProductsById, createProduct },
+  functions: {
+    getProductsList,
+    getProductsById,
+    createProduct,
+    catalogBatchProcess,
+  },
   package: { individually: true },
   custom: {
     esbuild: {
@@ -83,6 +94,26 @@ const serverlessConfiguration: AWS = {
             ReadCapacityUnits: 1,
             WriteCapacityUnits: 1,
           },
+        },
+      },
+      catalogItemsQueue: {
+        Type: "AWS::SQS::Queue",
+        Properties: {
+          QueueName: "catalogItemsQueue",
+        },
+      },
+      CreateProductTopic: {
+        Type: "AWS::SNS::Topic",
+        Properties: {
+          TopicName: "createProductTopic",
+        },
+      },
+      CreateProductTopicSubscription: {
+        Type: "AWS::SNS::Subscription",
+        Properties: {
+          Protocol: "email",
+          TopicArn: { Ref: "CreateProductTopic" },
+          Endpoint: "david_cortes@epam.com",
         },
       },
     },

@@ -1,4 +1,6 @@
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
+
 import { S3Event } from "aws-lambda";
 import { parse } from "csv-parse";
 
@@ -18,15 +20,32 @@ const importFileParser = async (event: S3Event) => {
   const command = new GetObjectCommand(params);
   const response = await client.send(command);
 
-  await parseAndLog(response.Body);
+  await parseAndSendToQueue(response.Body);
 };
 
-const parseAndLog = async (stream) => {
-  const parser = stream.pipe(parse());
+const sqsClient = new SQSClient({});
+
+const parseAndSendToQueue = async (stream) => {
+  const parser = stream.pipe(
+    parse({
+      columns: true,
+      skip_empty_lines: true,
+      bom: true,
+    })
+  );
 
   for await (const record of parser) {
-    console.info(`Received record ${record}`);
+    await sendToQueue(JSON.stringify(record));
   }
+};
+
+const sendToQueue = async (body: string) => {
+  const command = new SendMessageCommand({
+    QueueUrl: process.env.SQS_QUEUE_URL,
+    MessageBody: body,
+  });
+
+  return await sqsClient.send(command);
 };
 
 export const main = importFileParser;
